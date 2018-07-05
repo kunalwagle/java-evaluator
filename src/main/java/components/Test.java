@@ -2,6 +2,8 @@ package components;
 
 public class Test {
 
+    private String title;
+    private Category category;
     private int firstInput;
     private int secondInput;
     private int thirdInput;
@@ -9,7 +11,9 @@ public class Test {
     private boolean exceptionExpected;
     private String exceptionText;
 
-    public Test(int firstInput, int secondInput, int thirdInput, int[] expected, boolean exceptionExpected, String exceptionText) {
+    public Test(String title, Category category, int firstInput, int secondInput, int thirdInput, int[] expected, boolean exceptionExpected, String exceptionText) {
+        this.title = title;
+        this.category = category;
         this.firstInput = firstInput;
         this.secondInput = secondInput;
         this.thirdInput = thirdInput;
@@ -40,5 +44,13 @@ public class Test {
 
     public String getExceptionText() {
         return exceptionText;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }

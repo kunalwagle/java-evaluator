@@ -2,6 +2,7 @@ package controllers;
 
 
 //import components.Answer;
+import components.Category;
 import components.CompletedTest;
 import components.Test;
 import components.TestResult;
@@ -66,10 +67,10 @@ public class EvaluationController {
 
     private List<Test> generateTests() {
         List<Test> tests = new ArrayList<>();
-        tests.add(new Test(10, 20, 30, new int[]{10, 20, 30}, false, ""));
-        tests.add(new Test(10, 20, 30, new int[]{10, 20, 40}, false, ""));
-        tests.add(new Test(10, 20, 30, new int[]{10, 20, 50}, false, ""));
-        tests.add(new Test(10, 20, 30, new int[]{10, 20, 60}, false, ""));
+        tests.add(new Test("Test 1", Category.BASIC, 10, 20, 30, new int[]{10, 20, 30}, false, ""));
+        tests.add(new Test("Test 2", Category.BASIC, 10, 20, 30, new int[]{10, 20, 30}, false, ""));
+        tests.add(new Test("Test 3", Category.MEDIUM, 10, 20, 30, new int[]{10, 20, 30}, false, ""));
+        tests.add(new Test("Test 4", Category.DIFFICULT, 10, 20, 30, new int[]{10, 20, 30}, false, ""));
 
         return tests;
     }
