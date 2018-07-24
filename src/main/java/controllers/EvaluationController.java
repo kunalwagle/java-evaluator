@@ -2,15 +2,13 @@ package controllers;
 
 
 //import components.Answer;
+
 import components.Category;
 import components.CompletedTest;
 import components.Test;
 import components.TestResult;
 import org.mdkt.compiler.InMemoryJavaCompiler;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -30,7 +28,8 @@ public class EvaluationController {
         this.tests = tests;
     }
 
-    @RequestMapping(path="/evaluate", method= RequestMethod.POST)
+    @CrossOrigin
+    @RequestMapping(path = "/evaluate", method = RequestMethod.POST)
     public TestResult evaluate(@RequestBody String input) {
 
         List<CompletedTest> completedTests = new ArrayList<>();
