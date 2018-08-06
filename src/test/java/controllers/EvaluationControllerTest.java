@@ -30,7 +30,7 @@ public class EvaluationControllerTest {
                 "    }\n" +
                 "\n" +
                 "}";
-        TestResult testResult = new EvaluationController(generateTests()).evaluate(code);
+        TestResult testResult = new EvaluationController(generateTests()).evaluate("java", code);
         Map<String, List<CompletedTest>> map = testResult.getCompletedTests();
         List<CompletedTest> completedTests = map.get(Category.BASIC.getType());
         CompletedTest completedTest = completedTests.get(0);
@@ -51,7 +51,7 @@ public class EvaluationControllerTest {
                 "    }\n" +
                 "\n" +
                 "}";
-        TestResult testResult = new EvaluationController(generateTests()).evaluate(code);
+        TestResult testResult = new EvaluationController(generateTests()).evaluate("java", code);
         Map<String, List<CompletedTest>> map = testResult.getCompletedTests();
         List<CompletedTest> completedTests = map.get(Category.BASIC.getType());
         CompletedTest completedTest1 = completedTests.get(0);
@@ -74,7 +74,7 @@ public class EvaluationControllerTest {
                 "    }\n" +
                 "\n" +
                 "}";
-        TestResult testResult = new EvaluationController(generateTests()).evaluate(code);
+        TestResult testResult = new EvaluationController(generateTests()).evaluate("java", code);
         Map<String, List<CompletedTest>> map = testResult.getCompletedTests();
         List<CompletedTest> completedTests = map.get(Category.BASIC.getType());
         CompletedTest completedTest = completedTests.get(0);
@@ -98,7 +98,7 @@ public class EvaluationControllerTest {
         components.Test test = new components.Test("Exception", Category.BASIC, 0, 0, 0, null, true, "java.lang.NullPointerException: Something is null");
         List<components.Test> tests = new ArrayList<>();
         tests.add(test);
-        TestResult testResult = new EvaluationController(tests).evaluate(code);
+        TestResult testResult = new EvaluationController(tests).evaluate("java", code);
         Map<String, List<CompletedTest>> map = testResult.getCompletedTests();
         List<CompletedTest> completedTests = map.get(Category.BASIC.getType());
         CompletedTest completedTest = completedTests.get(0);
@@ -121,7 +121,7 @@ public class EvaluationControllerTest {
                 "    }\n" +
                 "\n" +
                 "}";
-        TestResult testResult = new EvaluationController(generateTests()).evaluate(code);
+        TestResult testResult = new EvaluationController(generateTests()).evaluate("java", code);
         Map<String, List<CompletedTest>> map = testResult.getCompletedTests();
         List<CompletedTest> completedTests = map.get(Category.BASIC.getType());
         CompletedTest completedTest = completedTests.get(0);
@@ -147,7 +147,7 @@ public class EvaluationControllerTest {
         components.Test test = new components.Test("Exception", Category.BASIC, 0, 0, 0, null, true, "java.lang.NullPointerException: Something is null");
         List<components.Test> tests = new ArrayList<>();
         tests.add(test);
-        TestResult testResult = new EvaluationController(tests).evaluate(code);
+        TestResult testResult = new EvaluationController(tests).evaluate("java", code);
         Map<String, List<CompletedTest>> map = testResult.getCompletedTests();
         List<CompletedTest> completedTests = map.get(Category.BASIC.getType());
         CompletedTest completedTest = completedTests.get(0);
@@ -155,6 +155,102 @@ public class EvaluationControllerTest {
         Assert.assertEquals(1, completedTests.size());
         Assert.assertEquals(completedTest.isPassed(), false);
         Assert.assertEquals(completedTest.getMessage(), "Expected exception with message: java.lang.NullPointerException: Something is null, but got message: java.lang.ArrayIndexOutOfBoundsException: 42");
+    }
+
+    @Test
+    public void interpretationErrorGetsReturned() {
+        String code = "def shuffle(arg0, arg1, arg2):\n" +
+                "\treturn [10, 20 30]";
+        TestResult testResult = new EvaluationController(generateTests()).evaluate("python", code);
+        Map<String, List<CompletedTest>> map = testResult.getCompletedTests();
+        List<CompletedTest> completedTests = map.get(Category.BASIC.getType());
+        CompletedTest completedTest = completedTests.get(0);
+        Assert.assertEquals(1, map.size());
+        Assert.assertEquals(1, completedTests.size());
+        Assert.assertEquals("SyntaxError: (\"no viable alternative at input '30'\", ('<string>', 2, 16, '\\treturn [10, 20 30]\\n'))" +
+                "\n", completedTest.getMessage());
+    }
+
+    @Test
+    public void pythonRunsUntilFailure() {
+        String code = "def shuffle(arg0, arg1, arg2):\n" +
+                "\treturn [10, 20, 30]";
+        TestResult testResult = new EvaluationController(generateTests()).evaluate("python", code);
+        Map<String, List<CompletedTest>> map = testResult.getCompletedTests();
+        List<CompletedTest> completedTests = map.get(Category.BASIC.getType());
+        CompletedTest completedTest1 = completedTests.get(0);
+        CompletedTest completedTest2 = completedTests.get(1);
+        Assert.assertEquals(1, map.size());
+        Assert.assertEquals(2, completedTests.size());
+        Assert.assertEquals(completedTest1.isPassed(), true);
+        Assert.assertEquals(completedTest1.getMessage(), "Test Passed");
+        Assert.assertEquals(completedTest2.isPassed(), false);
+    }
+
+    @Test
+    public void pythonGivesSensibleErrorMessage() {
+        String code = "def shuffle(arg0, arg1, arg2):\n" +
+                "\treturn [10, 20, 40]";
+        TestResult testResult = new EvaluationController(generateTests()).evaluate("python", code);
+        Map<String, List<CompletedTest>> map = testResult.getCompletedTests();
+        List<CompletedTest> completedTests = map.get(Category.BASIC.getType());
+        CompletedTest completedTest = completedTests.get(0);
+        Assert.assertEquals(1, map.size());
+        Assert.assertEquals(1, completedTests.size());
+        Assert.assertEquals(completedTest.isPassed(), false);
+        Assert.assertEquals(completedTest.getMessage(), "Expected [10, 20, 30], Got [10, 20, 40]");
+    }
+
+    @Test
+    public void pythonPassesTestForCorrectException() {
+        String code = "def shuffle(arg0, arg1, arg2):\n" +
+                "\traise Exception('There Was An Error')";
+        components.Test test = new components.Test("Exception", Category.BASIC, 0, 0, 0, null, true, "An Error");
+        List<components.Test> tests = new ArrayList<>();
+        tests.add(test);
+        TestResult testResult = new EvaluationController(tests).evaluate("python", code);
+        Map<String, List<CompletedTest>> map = testResult.getCompletedTests();
+        List<CompletedTest> completedTests = map.get(Category.BASIC.getType());
+        CompletedTest completedTest = completedTests.get(0);
+        Assert.assertEquals(1, map.size());
+        Assert.assertEquals(1, completedTests.size());
+        Assert.assertEquals(completedTest.isPassed(), true);
+        Assert.assertEquals(completedTest.getMessage(), "Test Passed");
+    }
+
+    @Test
+    public void failsPythonTestForException() {
+        String code = "def shuffle(arg0, arg1, arg2):\n" +
+                "\traise Exception('There Was An Error')";
+        TestResult testResult = new EvaluationController(generateTests()).evaluate("python", code);
+        Map<String, List<CompletedTest>> map = testResult.getCompletedTests();
+        List<CompletedTest> completedTests = map.get(Category.BASIC.getType());
+        CompletedTest completedTest = completedTests.get(0);
+        Assert.assertEquals(1, map.size());
+        Assert.assertEquals(1, completedTests.size());
+        Assert.assertEquals(completedTest.isPassed(), false);
+        Assert.assertEquals(completedTest.getMessage(), "Got an exception. Message: Traceback (most recent call last):\n" +
+                "  File \"<string>\", line 2, in shuffle\n" +
+                "Exception: There Was An Error\n");
+    }
+
+    @Test
+    public void failsPythonTestWhenWrongExceptionIsThrown() {
+        String code = "def shuffle(arg0, arg1, arg2):\n" +
+                "\traise Exception('There Was An Error')";
+        components.Test test = new components.Test("Exception", Category.BASIC, 0, 0, 0, null, true, "java.lang.NullPointerException: Something is null");
+        List<components.Test> tests = new ArrayList<>();
+        tests.add(test);
+        TestResult testResult = new EvaluationController(tests).evaluate("python", code);
+        Map<String, List<CompletedTest>> map = testResult.getCompletedTests();
+        List<CompletedTest> completedTests = map.get(Category.BASIC.getType());
+        CompletedTest completedTest = completedTests.get(0);
+        Assert.assertEquals(1, map.size());
+        Assert.assertEquals(1, completedTests.size());
+        Assert.assertEquals(completedTest.isPassed(), false);
+        Assert.assertEquals(completedTest.getMessage(), "Expected exception with message: java.lang.NullPointerException: Something is null, but got message: Traceback (most recent call last):\n" +
+                "  File \"<string>\", line 2, in shuffle\n" +
+                "Exception: There Was An Error\n");
     }
 
 
