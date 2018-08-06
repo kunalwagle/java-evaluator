@@ -18,6 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 @RestController
 public class EvaluationController {
@@ -52,6 +53,9 @@ public class EvaluationController {
             successfullyCompiled = compiledClass != null;
         } else {
             try {
+                Properties p = new Properties();
+                p.setProperty("python.import.site", "false");
+                PythonInterpreter.initialize(System.getProperties(), p, new String[] {});
                 PythonInterpreter interpreter = new PythonInterpreter();
                 interpreter.exec(input);
 
