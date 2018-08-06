@@ -14,6 +14,15 @@
         <version>2.0.0.RELEASE</version>
     </parent>
 
+    <repositories>
+        <!--other repositories if any-->
+        <repository>
+            <id>project.local</id>
+            <name>project</name>
+            <url>file:${project.basedir}/repo</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -35,9 +44,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.python</groupId>
-            <artifactId>jython-standalone</artifactId>
-            <version>2.7.1</version>
+            <groupId>com.example</groupId>
+            <artifactId>mylib</artifactId>
+            <version>1.0</version>
         </dependency>
 
 
