@@ -6,6 +6,7 @@ import components.TestResult;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class EvaluationControllerTest {
     }
 
     @Test
-    public void compilationErrorGetsReturned() {
+    public void compilationErrorGetsReturned() throws IOException {
         String code = "package components;\n" +
                 "\n" +
                 "public class Answer {\n" +
@@ -41,7 +42,7 @@ public class EvaluationControllerTest {
     }
 
     @Test
-    public void compilesAndRunsTestsUntilFailure() {
+    public void compilesAndRunsTestsUntilFailure() throws IOException {
         String code = "package components;\n" +
                 "\n" +
                 "public class Answer {\n" +
@@ -64,7 +65,7 @@ public class EvaluationControllerTest {
     }
 
     @Test
-    public void givesSensibleErrorMessage() {
+    public void givesSensibleErrorMessage() throws IOException {
         String code = "package components;\n" +
                 "\n" +
                 "public class Answer {\n" +
@@ -85,7 +86,7 @@ public class EvaluationControllerTest {
     }
 
     @Test
-    public void passesTestWhenExceptionIsThrownCorrectly() {
+    public void passesTestWhenExceptionIsThrownCorrectly() throws IOException {
         String code = "package components;\n" +
                 "\n" +
                 "public class Answer {\n" +
@@ -109,7 +110,7 @@ public class EvaluationControllerTest {
     }
 
     @Test
-    public void failsTestWhenExceptionIsThrownIncorrectly() {
+    public void failsTestWhenExceptionIsThrownIncorrectly() throws IOException {
         String code = "package components;\n" +
                 "\n" +
                 "public class Answer {\n" +
@@ -132,7 +133,7 @@ public class EvaluationControllerTest {
     }
 
     @Test
-    public void failsTestWhenWrongExceptionIsThrown() {
+    public void failsTestWhenWrongExceptionIsThrown() throws IOException {
         String code = "package components;\n" +
                 "\n" +
                 "public class Answer {\n" +
@@ -158,7 +159,7 @@ public class EvaluationControllerTest {
     }
 
     @Test
-    public void interpretationErrorGetsReturned() {
+    public void interpretationErrorGetsReturned() throws IOException {
         String code = "def shuffle(arg0, arg1, arg2):\n" +
                 "\treturn [10, 20 30]";
         TestResult testResult = new EvaluationController(generateTests()).evaluate("python", code);
@@ -172,7 +173,7 @@ public class EvaluationControllerTest {
     }
 
     @Test
-    public void pythonRunsUntilFailure() {
+    public void pythonRunsUntilFailure() throws IOException {
         String code = "def shuffle(arg0, arg1, arg2):\n" +
                 "\treturn [10, 20, 30]";
         TestResult testResult = new EvaluationController(generateTests()).evaluate("python", code);
@@ -188,7 +189,7 @@ public class EvaluationControllerTest {
     }
 
     @Test
-    public void pythonGivesSensibleErrorMessage() {
+    public void pythonGivesSensibleErrorMessage() throws IOException {
         String code = "def shuffle(arg0, arg1, arg2):\n" +
                 "\treturn [10, 20, 40]";
         TestResult testResult = new EvaluationController(generateTests()).evaluate("python", code);
@@ -202,7 +203,7 @@ public class EvaluationControllerTest {
     }
 
     @Test
-    public void pythonPassesTestForCorrectException() {
+    public void pythonPassesTestForCorrectException() throws IOException {
         String code = "def shuffle(arg0, arg1, arg2):\n" +
                 "\traise Exception('There Was An Error')";
         components.Test test = new components.Test("Exception", Category.BASIC, 0, 0, 0, null, true, "An Error");
@@ -219,7 +220,7 @@ public class EvaluationControllerTest {
     }
 
     @Test
-    public void failsPythonTestForException() {
+    public void failsPythonTestForException() throws IOException {
         String code = "def shuffle(arg0, arg1, arg2):\n" +
                 "\traise Exception('There Was An Error')";
         TestResult testResult = new EvaluationController(generateTests()).evaluate("python", code);
@@ -235,7 +236,7 @@ public class EvaluationControllerTest {
     }
 
     @Test
-    public void failsPythonTestWhenWrongExceptionIsThrown() {
+    public void failsPythonTestWhenWrongExceptionIsThrown() throws IOException {
         String code = "def shuffle(arg0, arg1, arg2):\n" +
                 "\traise Exception('There Was An Error')";
         components.Test test = new components.Test("Exception", Category.BASIC, 0, 0, 0, null, true, "java.lang.NullPointerException: Something is null");
