@@ -1,10 +1,13 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class TestServiceJava {
+
+    List<DataPoint> datapoints = new ArrayList<>();
 
     private String reverseString(String s) {
         return new StringBuilder(s).reverse().toString();

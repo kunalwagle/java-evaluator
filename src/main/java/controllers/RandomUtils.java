@@ -1,9 +1,6 @@
 package controllers;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class RandomUtils {
 
@@ -39,5 +36,9 @@ public class RandomUtils {
         List<String> asList = Arrays.asList(array);
         asList.remove(toBeRemoved);
         return (String[]) asList.toArray();
+    }
+
+    public DataPoint generateDataPoints() {
+        return new DataPoint(getRandomInt(500, 1000) / 10, new Date());
     }
 }
