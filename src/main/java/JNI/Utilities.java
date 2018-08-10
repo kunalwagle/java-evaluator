@@ -1,8 +1,11 @@
 package JNI;
 
+import components.CompletedTest;
 import components.Test;
+import components.TestResult;
 
 import java.io.*;
+import java.util.ArrayList;
 
 
 public class Utilities {
@@ -137,4 +140,112 @@ public class Utilities {
 
         printWriter.close();
     }
+
+
+    // Compilation orchestrator
+    public static String compile (Test test, String input) throws IOException{
+        Utilities.createNativeJavaTestClass(test);
+        Utilities.createHeaderFile();
+        Utilities.createInterfaceFile(input);
+
+        // Create file script for JNI stuff
+        File tempScript = createTempScript("javac");
+        try {
+            ProcessBuilder pb = new ProcessBuilder("bash", tempScript.toString());
+            pb.inheritIO();
+            Process process = pb.start();
+            process.waitFor();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            tempScript.delete();
+        }
+
+        StringBuffer compilationOutput = new StringBuffer();
+
+        tempScript = createTempScript("gcc");
+        try {
+            ProcessBuilder pb = new ProcessBuilder("bash", tempScript.toString());
+            pb.redirectErrorStream(true);
+
+            Process process = pb.start();
+            process.waitFor();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                compilationOutput.append(line + "\n");
+            }
+            process.waitFor();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            tempScript.delete();
+        }
+
+        return compilationOutput.toString();
+    }
+
+    // Test run orchestrator
+    public static int[] runCTest(Test test) throws IOException {
+        createNativeJavaTestClass(test);
+
+        // Build the class again
+        File tempScript = createTempScript("javac");
+        try{
+            ProcessBuilder pb = new ProcessBuilder("bash", tempScript.toString());
+            Process process = pb.start();
+            process.waitFor();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            tempScript.delete();
+        }
+
+        StringBuffer runtimeOutput = new StringBuffer();
+
+        tempScript = createTempScript("run");
+        try{
+            ProcessBuilder pb = new ProcessBuilder("bash", tempScript.toString());
+            Process process = pb.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            String line = "";
+            while ((line = reader.readLine())!= null) {
+                runtimeOutput.append(line + "\n");
+            }
+
+            process.waitFor();
+
+            //System.out.println(runtimeOutput.toString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            tempScript.delete();
+        }
+
+        String lines[] = runtimeOutput.toString().split("\n");
+        ArrayList<Integer> outputList = new ArrayList<>();
+        try {
+            for (String stringNumber : lines){
+                int number = Integer.parseInt(stringNumber);
+                outputList.add(number);
+            }
+        } catch (Exception e){
+            // TODO: handle runtime errors
+            //completedTests.add(new CompletedTest(test, false, "Got a runtime error. Message: Output should be integers"));
+        }
+
+        // Convert to int[] for assertion
+        int[] response = new int[outputList.size()];
+        for (int i = 0; i < outputList.size(); i++){
+            response[i] = outputList.get(i);
+        }
+
+        return response;
+    }
+
+
 }
