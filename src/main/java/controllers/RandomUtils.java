@@ -11,6 +11,9 @@ public class RandomUtils {
     }
 
     public String getRandomString(int maxLength) {
+        if (maxLength <= 0) {
+            throw new IllegalArgumentException();
+        }
         return String.valueOf(Math.random()).substring(2, maxLength - 1)
                 + String.valueOf(Math.random()).substring(2, maxLength - 1);
     }
@@ -18,6 +21,7 @@ public class RandomUtils {
     private int getRandomInt(int min, int max) {
         return new Random().nextInt(max - min + 1) + min;
     }
+
 //    This is a mess, ive no idea what input type is
     public String[] randomlyRemoveField(String[][] input, String field) {
         int idx = getRandomInt(0, input.length);
