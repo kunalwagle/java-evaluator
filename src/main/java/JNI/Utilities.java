@@ -6,6 +6,7 @@ import components.TestResult;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Utilities {
@@ -57,7 +58,8 @@ public class Utilities {
         printWriter.println();
         printWriter.println("private native int[] answer(int arg1, int arg2, int arg3);"); // Native method declaration
         printWriter.println("public static void main(String[] args){"); // Test Driver
-        printWriter.println("int[] a = new TempJNICpp().answer(" + test.getFirstInput() + ", " + test.getSecondInput() + ", " + test.getThirdInput() + "); \n for(int i = 0; i < 3; i++) { System.out.println(a[i]); } \n}\n}"); // Invoke native method TODO: signature should use input
+        printWriter.println("int[] a = new TempJNICpp().answer(" + test.getFirstInput() + ", " + test.getSecondInput() + ", " + test.getThirdInput() + "); \n for(int i = 0; i < 3; i++) { System.out.println(a[i]); } \n}\n}"); // Invoke native method
+
 
         printWriter.close();
 
@@ -100,16 +102,16 @@ public class Utilities {
         printWriter.println("#include <jni.h>");
         printWriter.println("#include \"TempJNICpp.h\"");
         printWriter.println("#include \"TempJNICppImpl.h\"\n");
-        printWriter.println(input);
+
         printWriter.println("JNIEXPORT jintArray JNICALL Java_TempJNICpp_answer (JNIEnv *env, jobject thisObj, jint input1, jint input2, jint input3) {"); // not sure about this line
         printWriter.println("jintArray output;\nint i;\njint result[3];");
         printWriter.println("output = (*env)->NewIntArray(env, 3);");
         printWriter.println("int* temp = answer(input1, input2, input3);");
         printWriter.println("for (i = 0; i < 3; i ++){ result[i] = temp[i]; }");
-        printWriter.println("(*env)->SetIntArrayRegion(env, output, 0, 3, result);");// TODO: this should use the signature passed in the input with the 3 arguments
+        printWriter.println("(*env)->SetIntArrayRegion(env, output, 0, 3, result);");
         printWriter.println("return output;");
         printWriter.println("}");
-
+        printWriter.println(input);
         printWriter.close();
     }
 
@@ -147,7 +149,7 @@ public class Utilities {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                compilationOutput.append(line + "\n");
+                compilationOutput.append(line).append("\n");
             }
             process.waitFor();
         } catch (InterruptedException e) {
@@ -156,7 +158,27 @@ public class Utilities {
             tempScript.delete();
         }
 
-        return compilationOutput.toString();
+        return secureCompilationOutput(compilationOutput.toString());
+    }
+
+    // Remvoes unnecessary information from compilation output
+    private static String secureCompilationOutput(String secure) {
+        if (!secure.equals("")) {
+            String[] lines = secure.split("\n");
+
+            String[] details = lines[0].split(":");
+            lines[0] = details[3]+": "+ details[4];
+
+            if (lines.length > 1) {
+                secure = lines[0] + "\n" + lines[1].trim();
+            } else {
+                secure = lines[0];
+            }
+
+            return secure;
+        }
+
+        return secure;
     }
 
     // Test run orchestrator

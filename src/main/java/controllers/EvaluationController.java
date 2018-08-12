@@ -77,7 +77,6 @@ public class EvaluationController {
                 // Stop if error occurred
                 if (compilationOutput.contains("error")) {
                     completedTests.add(new CompletedTest(tests.get(0), false, compilationOutput));
-                    System.out.println(compilationOutput);
                     return new TestResult(completedTests, tests.size());
                 } else {
                     successfullyCompiled = true;
