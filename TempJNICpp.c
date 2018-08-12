@@ -7,7 +7,7 @@ int* answer(int input1, int input2, int input3){
 		a[0] = input1;
 		a[1] = input2;
 		a[2] = input3;
-
+		
 		return a;
 		
 }

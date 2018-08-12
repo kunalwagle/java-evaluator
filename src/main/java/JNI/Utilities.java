@@ -11,8 +11,7 @@ import java.util.ArrayList;
 public class Utilities {
 
     // Used for the JNI script that builds the Native java code from C
-    public static File createTempScript(String command) throws IOException {
-        //TODO: make sure it overwrites whatever
+    private static File createTempScript(String command) throws IOException {
 
         File tempScript = File.createTempFile("script", null);
 
@@ -25,14 +24,14 @@ public class Utilities {
         if (command.compareTo("javac") == 0) {
             // JavaC and JavaH compilation
             printWriter.println("javac -h . TempJNICpp.java");
-        } else if (command.compareTo("gcc") == 0){
+        } else if (command.compareTo("gcc") == 0) {
             // GCC compilation of the resulting C script
-            if ("mac os x".equals(System.getProperty("os.name").toLowerCase())){
+            if ("mac os x".equals(System.getProperty("os.name").toLowerCase())) {
                 printWriter.println("gcc -I\"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/\" -I\"$JAVA_HOME/include/darwin/\" -o libjniexample.jnilib -shared TempJNICpp.c");
             } else {
                 printWriter.println("gcc -fPIC -I\"$JAVA_HOME/include\" -I\"$JAVA_HOME/include/linux\" -shared -o libhello.so TempJNICpp.c");
             }
-        } else if (command.compareTo("run") == 0){
+        } else if (command.compareTo("run") == 0) {
             // Run the damn build, ffs
             printWriter.println("java -Djava.library.path=. TempJNICpp");
         }
@@ -43,7 +42,7 @@ public class Utilities {
     }
 
     // Used to create the Native Java Class that calls the C/Cpp
-    public static void createNativeJavaTestClass (Test test) throws IOException{
+    private static void createNativeJavaTestClass(Test test) throws IOException {
 
         File nativeFile = new File("TempJNICpp.java");
 
@@ -58,20 +57,17 @@ public class Utilities {
         printWriter.println();
         printWriter.println("private native int[] answer(int arg1, int arg2, int arg3);"); // Native method declaration
         printWriter.println("public static void main(String[] args){"); // Test Driver
-        printWriter.println("int[] a = new TempJNICpp().answer("+ test.getFirstInput() + ", " + test.getSecondInput() + ", " + test.getThirdInput() + "); \n for(int i = 0; i < 3; i++) { System.out.println(a[i]); } \n}\n}"); // Invoke native method TODO: signature should use input
+        printWriter.println("int[] a = new TempJNICpp().answer(" + test.getFirstInput() + ", " + test.getSecondInput() + ", " + test.getThirdInput() + "); \n for(int i = 0; i < 3; i++) { System.out.println(a[i]); } \n}\n}"); // Invoke native method TODO: signature should use input
 
         printWriter.close();
 
     }
 
     // Used to create the native C++ header for implementation of the C++ code received
-    public static void createHeaderFile () throws IOException{
+    private static void createHeaderFile() throws IOException {
 
         File headerFile = new File("TempJNICppImpl.h");
-  /*      if (headerFile.exists()){
-            return;
-        }
-*/
+
         Writer streamWriter = new OutputStreamWriter(new FileOutputStream(headerFile));
         PrintWriter printWriter = new PrintWriter(streamWriter);
 
@@ -93,34 +89,10 @@ public class Utilities {
 
     }
 
-    // Used to create the C++ file to be tested
-    public static void createImplementationFile(String input) throws IOException{
-        //TODO: make sure it overwrites whatever // Is this the wrong TODO? I didn't touch it just in case
-
-        File cppFile = new File("TempJNICppImpl.c");
-
-        Writer streamWriter = new OutputStreamWriter(new FileOutputStream(cppFile));
-        PrintWriter printWriter = new PrintWriter(streamWriter);
-
-        // TODO: move hardcoded header to a file in the scope of the project to improve cleanness
-        printWriter.println("#include \"TempJNICppImpl.h\"");
-        printWriter.println("#include <iostream>");
-        printWriter.println();
-        printWriter.println("using namespace std;");
-        printWriter.println();
-        printWriter.println(input);
-
-        printWriter.close();
-    }
-
     // Creates the C interface that communicates with Java
-    public static void createInterfaceFile(String input) throws IOException{
+    private static void createInterfaceFile(String input) throws IOException {
 
         File interfaceFile = new File("TempJNICpp.c");
- /*       if (interfaceFile.exists()){
-            return;
-        }
-*/
 
         Writer streamWriter = new OutputStreamWriter(new FileOutputStream(interfaceFile));
         PrintWriter printWriter = new PrintWriter(streamWriter);
@@ -143,7 +115,7 @@ public class Utilities {
 
 
     // Compilation orchestrator
-    public static String compile (Test test, String input) throws IOException{
+    public static String compile(Test test, String input) throws IOException {
         Utilities.createNativeJavaTestClass(test);
         Utilities.createHeaderFile();
         Utilities.createInterfaceFile(input);
@@ -161,7 +133,7 @@ public class Utilities {
             tempScript.delete();
         }
 
-        StringBuffer compilationOutput = new StringBuffer();
+        StringBuilder compilationOutput = new StringBuilder();
 
         tempScript = createTempScript("gcc");
         try {
@@ -173,7 +145,7 @@ public class Utilities {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-            String line = "";
+            String line;
             while ((line = reader.readLine()) != null) {
                 compilationOutput.append(line + "\n");
             }
@@ -188,12 +160,15 @@ public class Utilities {
     }
 
     // Test run orchestrator
-    public static int[] runCTest(Test test) throws IOException {
+    public static C_Response runCTest(Test test) throws IOException {
+
+        C_Response response = new C_Response();
+
         createNativeJavaTestClass(test);
 
         // Build the class again
         File tempScript = createTempScript("javac");
-        try{
+        try {
             ProcessBuilder pb = new ProcessBuilder("bash", tempScript.toString());
             Process process = pb.start();
             process.waitFor();
@@ -203,46 +178,58 @@ public class Utilities {
             tempScript.delete();
         }
 
-        StringBuffer runtimeOutput = new StringBuffer();
+        StringBuilder runtimeOutput = new StringBuilder();
 
+        // Run the test, catch the output
         tempScript = createTempScript("run");
-        try{
+        try {
             ProcessBuilder pb = new ProcessBuilder("bash", tempScript.toString());
             Process process = pb.start();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-            String line = "";
-            while ((line = reader.readLine())!= null) {
-                runtimeOutput.append(line + "\n");
+            String line;
+            while ((line = reader.readLine()) != null) {
+                runtimeOutput.append(line).append("\n");
             }
 
             process.waitFor();
 
-            //System.out.println(runtimeOutput.toString());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             tempScript.delete();
         }
 
+        // Validate and check the output
         String lines[] = runtimeOutput.toString().split("\n");
+
         ArrayList<Integer> outputList = new ArrayList<>();
-        try {
-            for (String stringNumber : lines){
-                int number = Integer.parseInt(stringNumber);
-                outputList.add(number);
+
+
+        /*if (runtimeOutput.toString().contains("-1")){
+            response.error = runtimeOutput.toString();
+        } else if (runtimeOutput.toString().contains("abort") || runtimeOutput.toString().contains("error")) {
+            response.error = runtimeOutput.toString();
+        } else {*/
+
+        if (lines.length > 2 && !runtimeOutput.toString().contains("-1") && !runtimeOutput.toString().contains("error")) {
+            try {
+                for (int i = 0; i < 3; i++) outputList.add(Integer.parseInt(lines[i]));
+            } catch (Exception e) {
+                response.error = runtimeOutput.toString();
             }
-        } catch (Exception e){
-            // TODO: handle runtime errors
-            //completedTests.add(new CompletedTest(test, false, "Got a runtime error. Message: Output should be integers"));
-        }
+        } else response.error = runtimeOutput.toString();
+
+        //}
 
         // Convert to int[] for assertion
-        int[] response = new int[outputList.size()];
-        for (int i = 0; i < outputList.size(); i++){
-            response[i] = outputList.get(i);
+        int[] values = new int[outputList.size()];
+        for (int i = 0; i < outputList.size(); i++) {
+            values[i] = outputList.get(i);
         }
+
+        response.values = values;
 
         return response;
     }

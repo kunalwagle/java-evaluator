@@ -3,6 +3,7 @@ package controllers;
 
 //import components.Answer;
 
+import JNI.C_Response;
 import JNI.Utilities;
 import components.Category;
 import components.CompletedTest;
@@ -16,18 +17,12 @@ import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-
-import static JNI.Utilities.createNativeJavaTestClass;
-import static JNI.Utilities.createTempScript;
 
 @RestController
 public class EvaluationController {
@@ -38,7 +33,7 @@ public class EvaluationController {
         this.tests = generateTests();
     }
 
-    public EvaluationController(List<Test> tests) {
+    EvaluationController(List<Test> tests) {
         this.tests = tests;
     }
 
@@ -53,38 +48,42 @@ public class EvaluationController {
 
         PyObject shuffleFunction = null;
 
-        if (language.equals("java")) {
-            try {
-                compiledClass = compileInput(input);
-            } catch (Exception e) {
-                completedTests.add(new CompletedTest(tests.get(0), false, e.getMessage()));
-            }
-            successfullyCompiled = compiledClass != null;
-        } else if (language.equals("python")) {
-            try {
-                Properties p = new Properties();
-                p.setProperty("python.import.site", "false");
-                PythonInterpreter.initialize(System.getProperties(), p, new String[] {});
-                PythonInterpreter interpreter = new PythonInterpreter();
-                interpreter.exec(input);
+        switch (language) {
+            case "java":
+                try {
+                    compiledClass = compileInput(input);
+                } catch (Exception e) {
+                    completedTests.add(new CompletedTest(tests.get(0), false, e.getMessage()));
+                }
+                successfullyCompiled = compiledClass != null;
+                break;
+            case "python":
+                try {
+                    Properties p = new Properties();
+                    p.setProperty("python.import.site", "false");
+                    PythonInterpreter.initialize(System.getProperties(), p, new String[]{});
+                    PythonInterpreter interpreter = new PythonInterpreter();
+                    interpreter.exec(input);
 
-                shuffleFunction = interpreter.get("shuffle");
-            } catch (Exception  e) {
-                completedTests.add(new CompletedTest(tests.get(0), false, e.toString()));
-                successfullyCompiled = false;
-            }
-        } else if (language.equals("c")) {
-            String compilationOutput = Utilities.compile(tests.get(0), input);
+                    shuffleFunction = interpreter.get("shuffle");
+                } catch (Exception e) {
+                    completedTests.add(new CompletedTest(tests.get(0), false, e.toString()));
+                    successfullyCompiled = false;
+                }
+                break;
+            case "c":
+                String compilationOutput = Utilities.compile(tests.get(0), input);
 
-            // Stop if error occurred
-            if (compilationOutput.contains("error")) {
-                completedTests.add(new CompletedTest(tests.get(0), false, compilationOutput));
-                System.out.println(compilationOutput);
-                return new TestResult(completedTests, tests.size());
-            } else {
-                successfullyCompiled = true;
-                System.out.println("Compilation successful.");
-            }
+                // Stop if error occurred
+                if (compilationOutput.contains("error")) {
+                    completedTests.add(new CompletedTest(tests.get(0), false, compilationOutput));
+                    System.out.println(compilationOutput);
+                    return new TestResult(completedTests, tests.size());
+                } else {
+                    successfullyCompiled = true;
+                    System.out.println("Compilation successful.");
+                }
+                break;
         }
         if (successfullyCompiled) {
 
@@ -116,9 +115,29 @@ public class EvaluationController {
         try {
             int[] response;
 
-            if (language.equals("java")) response = runJavaTest(compiledClass, test);
-            else if (language.equals("python")) response = runPythonTest(shuffleFunction, test);
-            else response = Utilities.runCTest(test);
+            switch (language) {
+                case "java":
+                    response = runJavaTest(compiledClass, test);
+                    break;
+                case "python":
+                    response = runPythonTest(shuffleFunction, test);
+                    break;
+                default:
+                    C_Response cResponse = Utilities.runCTest(test);
+
+                    if (cResponse.error.equals("")) {
+                        response = cResponse.values;
+                    } else {
+                        if (cResponse.error.contains("-1")){
+                            // TODO: throw errors here based on keywords? and check them - ask Kunal what erros do we have in the prod tests
+                            return checkError(test, cResponse.error);
+                        } else {
+                            return new CompletedTest(test, false, "Got an exception. Message: " + cResponse.error);
+                        }
+                    }
+
+                    break;
+            }
 
             if (Arrays.equals(test.getExpected(), response)) {
                 return new CompletedTest(test, true, "Test Passed");
