@@ -1,14 +1,13 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TestServiceJava {
 
     List<DataPoint> datapoints = new ArrayList<>();
     RandomUtils utils = new RandomUtils();
+//  This is cancer, I shall get rid of this asap
+    private final String[] alphabet = "abcdefgijklmnopqrstuxyz1234567890".split("");
 
     public String reverseString(String s) {
         return new StringBuilder(s).reverse().toString();
@@ -28,6 +27,7 @@ public class TestServiceJava {
     }
 
     public char getMaxOccurence(Map<Character, Integer> map) {
+        assert !map.isEmpty();
         char result = map.keySet().stream().findFirst().get();
         int max = map.get(result);
         for (Map.Entry<Character, Integer> a : map.entrySet()) {
@@ -42,5 +42,20 @@ public class TestServiceJava {
     public String sortString(String str) {
         return str.chars().sorted()
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
+    }
+
+//  This is a complete bs why are we even doing this
+    public String getSorterString() {
+        String[] copy = alphabet;
+        int currentIndex = alphabet.length;
+        String tmp;
+        while (currentIndex != 0) {
+            int randomIndex = (int) Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            tmp = copy[currentIndex];
+            copy[currentIndex] = copy[randomIndex];
+            copy[randomIndex] = tmp;
+        }
+        return String.join("", copy);
     }
 }
