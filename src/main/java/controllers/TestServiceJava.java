@@ -8,14 +8,15 @@ import java.util.Map;
 public class TestServiceJava {
 
     List<DataPoint> datapoints = new ArrayList<>();
+    RandomUtils utils = new RandomUtils();
 
-    private String reverseString(String s) {
+    public String reverseString(String s) {
         return new StringBuilder(s).reverse().toString();
     }
 
-    public Map<String, Integer> groupBy(List<String> list) {
-        Map<String, Integer> map = new HashMap<>();
-        for (String a : list) {
+    public Map<Character, Integer> groupBy(List<Character> list) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (Character a : list) {
             if (!map.containsKey(a)) {
                 map.put(a, 1);
             }
