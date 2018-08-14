@@ -45,7 +45,6 @@ public class TestServiceJava {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
     }
 
-//  This is a complete bs why are we even doing this
     public String getSorterString() {
         String[] copy = alphabet;
         int currentIndex = alphabet.length;
@@ -67,8 +66,9 @@ public class TestServiceJava {
     }
 //  To fix this one
     public String sortString(String sorterString, String str) {
-        char[] sortingArray = sorterString.toCharArray();
-//        Arrays.sort(str.toCharArray(), (Comparator<Character>) (a, b) -> sorterString.indexOf(a) - sorterString.indexOf(b));
+        (str.chars().mapToObj(i -> (char) i)).
+                collect(Collectors.toList()).
+                sort(Comparator.comparingInt(sorterString::indexOf));
         return str;
     }
 }
