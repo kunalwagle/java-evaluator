@@ -58,8 +58,8 @@ public class Utilities {
         printWriter.println();
         printWriter.println("private native int[] answer(int arg1, int arg2, int arg3);"); // Native method declaration
         printWriter.println("public static void main(String[] args){"); // Test Driver
-        printWriter.println("int[] a = new TempJNICpp().answer(" + test.getFirstInput() + ", " + test.getSecondInput() + ", " + test.getThirdInput() + "); \n for(int i = 0; i < 3; i++) { System.out.println(a[i]); } \n}\n}"); // Invoke native method
-
+        printWriter.println("int[] a = new TempJNICpp().answer(" + test.getFirstInput() + ", " + test.getSecondInput() + ", " + test.getThirdInput() + "); \n for(int i = 0; i < 3; i++) { System.out.println(a[i]); } \n"); // Invoke native method
+        printWriter.println("a = new int[]{};\n}\n}\n");
 
         printWriter.close();
 
@@ -161,13 +161,12 @@ public class Utilities {
         return secureCompilationOutput(compilationOutput.toString());
     }
 
-    // Remvoes unnecessary information from compilation output
+    // Removes unnecessary information from compilation output
     private static String secureCompilationOutput(String secure) {
-        if (!secure.equals("")) {
+        if (!secure.equals("") && secure.contains("TempJNIcpp.c:")) {
             String[] lines = secure.split("\n");
-
             String[] details = lines[0].split(":");
-            lines[0] = details[3]+": "+ details[4];
+            lines[0] = details[3] + ": " + details[4];
 
             if (lines.length > 1) {
                 secure = lines[0] + "\n" + lines[1].trim();
@@ -228,22 +227,20 @@ public class Utilities {
 
         ArrayList<Integer> outputList = new ArrayList<>();
 
-
-        /*if (runtimeOutput.toString().contains("-1")){
-            response.error = runtimeOutput.toString();
-        } else if (runtimeOutput.toString().contains("abort") || runtimeOutput.toString().contains("error")) {
-            response.error = runtimeOutput.toString();
-        } else {*/
-
         if (lines.length > 2 && !runtimeOutput.toString().contains("-1") && !runtimeOutput.toString().contains("error")) {
             try {
                 for (int i = 0; i < 3; i++) outputList.add(Integer.parseInt(lines[i]));
             } catch (Exception e) {
                 response.error = runtimeOutput.toString();
             }
-        } else response.error = runtimeOutput.toString();
+        } else {
+            response.error = runtimeOutput.toString();
+        }
 
-        //}
+        if (!response.error.equals("")){
+            String[] errorLines = response.error.split("\n");
+            response.error = errorLines[errorLines.length-1];
+        }
 
         // Convert to int[] for assertion
         int[] values = new int[outputList.size()];

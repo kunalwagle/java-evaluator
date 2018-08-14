@@ -17,6 +17,7 @@ import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -124,11 +125,13 @@ public class EvaluationController {
                 default:
                     C_Response cResponse = Utilities.runCTest(test);
 
-                    if (cResponse.error.equals("")) {
+                    if (cResponse.error.equals("") && cResponse.values.length > 1) {
                         response = cResponse.values;
+                    } else if (cResponse.error.equals("") || cResponse.error.contains("TempJNICpp") || cResponse.error.contains("SIGSEV")) {
+                        return new CompletedTest(test, false, "Got an exception. Message: " + "Runtime error. Please check your code.");
                     } else {
-                        if (cResponse.error.contains("-1")){
-                            // TODO: throw errors here based on keywords? and check them - ask Kunal what erros do we have in the prod tests
+                        if (cResponse.error.contains("-1")) {
+                            // TODO: throw errors here based on keywords? and check them - ask Kunal what errors do we have in the prod tests
                             return checkError(test, cResponse.error);
                         } else {
                             return new CompletedTest(test, false, "Got an exception. Message: " + cResponse.error);
@@ -172,7 +175,7 @@ public class EvaluationController {
         tests.add(new Test("Test 1", Category.BASIC, 10, 20, 30, new int[]{10, 20, 30}, false, ""));
         tests.add(new Test("Test 2", Category.BASIC, 10, 20, 40, new int[]{10, 20, 40}, false, ""));
         tests.add(new Test("Test 3", Category.MEDIUM, 10, 20, 50, new int[]{10, 20, 50}, false, ""));
-        tests.add(new Test("Test 4", Category.DIFFICULT, 10, 20, 200, new int[]{10, 20, 60}, false, ""));
+        tests.add(new Test("Test 4", Category.DIFFICULT, 10, 20, 90, new int[]{10, 20, 60}, false, ""));
 
         return tests;
     }
