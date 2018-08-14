@@ -23,8 +23,7 @@ public class ShuffleJava {
                                 collect(Collectors.toList())))).toString();
                 break;
             case 4:
-//              Not sure how parameter is even used here?
-                str = utils.getSorterString();
+                str = utils.sortString(str, String.valueOf(optionalArgs));
                 break;
             default:
                 throw new IllegalArgumentException("Wrong command entered");

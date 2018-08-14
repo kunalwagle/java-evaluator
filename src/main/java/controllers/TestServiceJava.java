@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TestServiceJava {
 
@@ -63,5 +64,11 @@ public class TestServiceJava {
         String tmp = str.substring(str.length() - Integer.valueOf(argv), str.length() - 1);
         str = str.substring(0, str.length() - Integer.valueOf(argv) - 1);
         return tmp.concat(str);
+    }
+//  To fix this one
+    public String sortString(String sorterString, String str) {
+        char[] sortingArray = sorterString.toCharArray();
+//        Arrays.sort(str.toCharArray(), (Comparator<Character>) (a, b) -> sorterString.indexOf(a) - sorterString.indexOf(b));
+        return str;
     }
 }
