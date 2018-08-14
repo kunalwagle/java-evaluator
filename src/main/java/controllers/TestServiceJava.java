@@ -58,4 +58,10 @@ public class TestServiceJava {
         }
         return String.join("", copy);
     }
+
+    public String moveToBeginning(String str, String argv) {
+        String tmp = str.substring(str.length() - Integer.valueOf(argv), str.length() - 1);
+        str = str.substring(0, str.length() - Integer.valueOf(argv) - 1);
+        return tmp.concat(str);
+    }
 }

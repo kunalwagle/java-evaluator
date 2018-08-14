@@ -12,6 +12,7 @@ public class ShuffleJava {
         Integer command = Integer.valueOf(argv);
         switch (command) {
             case 1:
+                str = utils.moveToBeginning(str, String.valueOf(optionalArgs));
                 break;
             case 2:
                 str = utils.reverseString(str);
@@ -22,6 +23,8 @@ public class ShuffleJava {
                                 collect(Collectors.toList())))).toString();
                 break;
             case 4:
+//              Not sure how parameter is even used here?
+                str = utils.getSorterString();
                 break;
             default:
                 throw new IllegalArgumentException("Wrong command entered");
