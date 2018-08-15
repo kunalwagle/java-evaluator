@@ -4,14 +4,14 @@ public class Test {
 
     private String title;
     private Category category;
-    private int firstInput;
-    private int secondInput;
-    private int thirdInput;
+    private String firstInput;
+    private String secondInput;
+    private String thirdInput;
     private int[] expected;
     private boolean exceptionExpected;
     private String exceptionText;
 
-    public Test(String title, Category category, int firstInput, int secondInput, int thirdInput, int[] expected, boolean exceptionExpected, String exceptionText) {
+    public Test(String title, Category category, String firstInput, String secondInput, String thirdInput, int[] expected, boolean exceptionExpected, String exceptionText) {
         this.title = title;
         this.category = category;
         this.firstInput = firstInput;
@@ -22,15 +22,15 @@ public class Test {
         this.exceptionText = exceptionText;
     }
 
-    public int getFirstInput() {
+    public String getFirstInput() {
         return firstInput;
     }
 
-    public int getSecondInput() {
+    public String getSecondInput() {
         return secondInput;
     }
 
-    public int getThirdInput() {
+    public String getThirdInput() {
         return thirdInput;
     }
 

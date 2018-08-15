@@ -5,12 +5,20 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/TempJNICpp.c" afterPath="$PROJECT_DIR$/TempJNICpp.c" />
       <change beforePath="$PROJECT_DIR$/TempJNICpp.class" afterPath="$PROJECT_DIR$/TempJNICpp.class" />
+      <change beforePath="$PROJECT_DIR$/TempJNICpp.h" afterPath="" />
       <change beforePath="$PROJECT_DIR$/TempJNICpp.java" afterPath="$PROJECT_DIR$/TempJNICpp.java" />
+      <change beforePath="$PROJECT_DIR$/TempJNICppImpl.h" afterPath="$PROJECT_DIR$/TempJNICppImpl.h" />
       <change beforePath="$PROJECT_DIR$/libjniexample.jnilib" afterPath="$PROJECT_DIR$/libjniexample.jnilib" />
       <change beforePath="$PROJECT_DIR$/src/main/java/JNI/Utilities.java" afterPath="$PROJECT_DIR$/src/main/java/JNI/Utilities.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/components/CompletedTest.java" afterPath="$PROJECT_DIR$/src/main/java/components/CompletedTest.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/components/Test.java" afterPath="$PROJECT_DIR$/src/main/java/components/Test.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/controllers/EvaluationController.java" afterPath="$PROJECT_DIR$/src/main/java/controllers/EvaluationController.java" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/controllers/EvaluationControllerTest.java" afterPath="$PROJECT_DIR$/src/test/java/controllers/EvaluationControllerTest.java" />
       <change beforePath="$PROJECT_DIR$/target/classes/JNI/Utilities.class" afterPath="$PROJECT_DIR$/target/classes/JNI/Utilities.class" />
+      <change beforePath="$PROJECT_DIR$/target/classes/components/CompletedTest.class" afterPath="$PROJECT_DIR$/target/classes/components/CompletedTest.class" />
+      <change beforePath="$PROJECT_DIR$/target/classes/components/Test.class" afterPath="$PROJECT_DIR$/target/classes/components/Test.class" />
       <change beforePath="$PROJECT_DIR$/target/classes/controllers/EvaluationController.class" afterPath="$PROJECT_DIR$/target/classes/controllers/EvaluationController.class" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/controllers/EvaluationControllerTest.class" afterPath="$PROJECT_DIR$/target/test-classes/controllers/EvaluationControllerTest.class" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,15 +29,15 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/com_cr_javaevaluator$Main.coverage" NAME="Main Coverage Results" MODIFIED="1534116033465" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/com_cr_javaevaluator$Main.coverage" NAME="Main Coverage Results" MODIFIED="1534364385294" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="EvaluationController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/controllers/EvaluationController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="235">
-              <caret line="176" column="75" lean-forward="false" selection-start-line="176" selection-start-column="75" selection-end-line="176" selection-end-column="75" />
+            <state relative-caret-position="335">
+              <caret line="174" column="81" lean-forward="false" selection-start-line="174" selection-start-column="81" selection-end-line="174" selection-end-column="81" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -40,11 +48,31 @@
       <file leaf-file-name="Utilities.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/JNI/Utilities.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="236" column="0" lean-forward="false" selection-start-line="236" selection-start-column="0" selection-end-line="236" selection-end-column="0" />
+            <state relative-caret-position="259">
+              <caret line="186" column="40" lean-forward="false" selection-start-line="186" selection-start-column="12" selection-end-line="186" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TempJNICpp.c" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TempJNICpp.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="13" column="17" lean-forward="false" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TempJNICpp.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TempJNICpp.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="36" lean-forward="false" selection-start-line="7" selection-start-column="36" selection-end-line="7" selection-end-column="36" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -61,6 +89,14 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>input</find>
+      <find>j</find>
+      <find>jSt</find>
+      <find>Cpp.h</find>
+      <find>Cpp.c</find>
+      <find>answer</find>
+      <find>javac</find>
+      <find>-1</find>
+      <find>jniex</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -74,10 +110,12 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/test/java/controllers/EvaluationControllerTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/JNI/C_Response.java" />
-        <option value="$PROJECT_DIR$/TempJNICpp.java" />
         <option value="$PROJECT_DIR$/TempJNICpp.c" />
+        <option value="$PROJECT_DIR$/src/main/java/components/Test.java" />
+        <option value="$PROJECT_DIR$/src/main/java/components/CompletedTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/controllers/EvaluationControllerTest.java" />
+        <option value="$PROJECT_DIR$/TempJNICpp.java" />
         <option value="$PROJECT_DIR$/src/main/java/JNI/Utilities.java" />
         <option value="$PROJECT_DIR$/src/main/java/controllers/EvaluationController.java" />
       </list>
@@ -139,6 +177,14 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="com.cr.javaevaluator" type="b2602c69:ProjectViewProjectNode" />
+              <item name="python+java-eval" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="com.cr.javaevaluator" type="b2602c69:ProjectViewProjectNode" />
@@ -557,14 +603,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/components/Test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="11" column="29" lean-forward="true" selection-start-line="11" selection-start-column="29" selection-end-line="11" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/controllers/EvaluationController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -664,47 +702,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/controllers/EvaluationControllerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2434">
-          <caret line="244" column="69" lean-forward="false" selection-start-line="244" selection-start-column="69" selection-end-line="244" selection-end-column="69" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TempJNICpp.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TempJNICpp.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="17" lean-forward="false" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TempJNICppImpl.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TempJNICpp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="58" lean-forward="true" selection-start-line="8" selection-start-column="58" selection-end-line="8" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TempJNICpp.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -721,10 +719,66 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/components/Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/components/CompletedTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="21" lean-forward="true" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/controllers/EvaluationControllerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="470">
+          <caret line="241" column="93" lean-forward="false" selection-start-line="241" selection-start-column="93" selection-end-line="241" selection-end-column="93" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TempJNICpp.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="13" column="17" lean-forward="false" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TempJNICpp.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TempJNICpp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="36" lean-forward="false" selection-start-line="7" selection-start-column="36" selection-end-line="7" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TempJNICpp.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="22" column="38" lean-forward="true" selection-start-line="22" selection-start-column="38" selection-end-line="22" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/JNI/Utilities.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="236" column="0" lean-forward="false" selection-start-line="236" selection-start-column="0" selection-end-line="236" selection-end-column="0" />
+        <state relative-caret-position="259">
+          <caret line="186" column="40" lean-forward="false" selection-start-line="186" selection-start-column="12" selection-end-line="186" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -733,8 +787,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/controllers/EvaluationController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="176" column="75" lean-forward="false" selection-start-line="176" selection-start-column="75" selection-end-line="176" selection-end-column="75" />
+        <state relative-caret-position="335">
+          <caret line="174" column="81" lean-forward="false" selection-start-line="174" selection-start-column="81" selection-end-line="174" selection-end-column="81" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

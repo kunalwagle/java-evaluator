@@ -15,8 +15,8 @@ public class EvaluationControllerTest {
 
     private List<components.Test> generateTests() {
         List<components.Test> tests = new ArrayList<>();
-        tests.add(new components.Test("Test 1", Category.BASIC, 10, 20, 30, new int[]{10, 20, 30}, false, ""));
-        tests.add(new components.Test("Test 2", Category.BASIC, 10, 20, 30, new int[]{10, 20, 40}, false, ""));
+        tests.add(new components.Test("Test 1", Category.BASIC, "10", "20", "30", new int[]{10, 20, 30}, false, ""));
+        tests.add(new components.Test("Test 2", Category.BASIC, "10", "20", "30", new int[]{10, 20, 40}, false, ""));
         return tests;
     }
 
@@ -96,7 +96,7 @@ public class EvaluationControllerTest {
                 "    }\n" +
                 "\n" +
                 "}";
-        components.Test test = new components.Test("Exception", Category.BASIC, 0, 0, 0, null, true, "java.lang.NullPointerException: Something is null");
+        components.Test test = new components.Test("Exception", Category.BASIC, "0", "0", "0", null, true, "java.lang.NullPointerException: Something is null");
         List<components.Test> tests = new ArrayList<>();
         tests.add(test);
         TestResult testResult = new EvaluationController(tests).evaluate("java", code);
@@ -145,7 +145,7 @@ public class EvaluationControllerTest {
                 "    }\n" +
                 "\n" +
                 "}";
-        components.Test test = new components.Test("Exception", Category.BASIC, 0, 0, 0, null, true, "java.lang.NullPointerException: Something is null");
+        components.Test test = new components.Test("Exception", Category.BASIC, "0", "0", "0", null, true, "java.lang.NullPointerException: Something is null");
         List<components.Test> tests = new ArrayList<>();
         tests.add(test);
         TestResult testResult = new EvaluationController(tests).evaluate("java", code);
@@ -206,7 +206,7 @@ public class EvaluationControllerTest {
     public void pythonPassesTestForCorrectException() throws IOException {
         String code = "def shuffle(arg0, arg1, arg2):\n" +
                 "\traise Exception('There Was An Error')";
-        components.Test test = new components.Test("Exception", Category.BASIC, 0, 0, 0, null, true, "An Error");
+        components.Test test = new components.Test("Exception", Category.BASIC, "0", "0", "0", null, true, "An Error");
         List<components.Test> tests = new ArrayList<>();
         tests.add(test);
         TestResult testResult = new EvaluationController(tests).evaluate("python", code);
@@ -239,7 +239,7 @@ public class EvaluationControllerTest {
     public void failsPythonTestWhenWrongExceptionIsThrown() throws IOException {
         String code = "def shuffle(arg0, arg1, arg2):\n" +
                 "\traise Exception('There Was An Error')";
-        components.Test test = new components.Test("Exception", Category.BASIC, 0, 0, 0, null, true, "java.lang.NullPointerException: Something is null");
+        components.Test test = new components.Test("Exception", Category.BASIC, "0", "0", "0", null, true, "java.lang.NullPointerException: Something is null");
         List<components.Test> tests = new ArrayList<>();
         tests.add(test);
         TestResult testResult = new EvaluationController(tests).evaluate("python", code);

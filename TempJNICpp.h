@@ -9,11 +9,11 @@ extern "C" {
 #endif
 /*
  * Class:     TempJNICpp
- * Method:    answer
- * Signature: (III)[I
+ * Method:    shuffle
+ * Signature: (Ljava/lang/String;ILjava/lang/String;ILjava/lang/String;I)[I
  */
-JNIEXPORT jintArray JNICALL Java_TempJNICpp_answer
-  (JNIEnv *, jobject, jint, jint, jint);
+JNIEXPORT jintArray JNICALL Java_TempJNICpp_shuffle
+  (JNIEnv *, jobject, jstring, jint, jstring, jint, jstring, jint);
 
 #ifdef __cplusplus
 }

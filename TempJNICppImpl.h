@@ -4,7 +4,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-int* answer(int arg1, int arg2, int arg3);
+int* shuffle(char* arg1, int len1, char* arg2, int len2, char* arg3, int len3);
 #ifdef __cplusplus
 }
 #endif

@@ -10,14 +10,12 @@ import components.CompletedTest;
 import components.Test;
 import components.TestResult;
 import org.mdkt.compiler.InMemoryJavaCompiler;
-import org.mdkt.compiler.SourceCode;
 import org.python.core.PyException;
-import org.python.core.PyInteger;
 import org.python.core.PyObject;
+import org.python.core.PyString;
 import org.python.util.PythonInterpreter;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -104,7 +102,7 @@ public class EvaluationController {
 
     private int[] runPythonTest(PyObject function, Test test) {
 
-        PyObject result = function.__call__(new PyInteger(test.getFirstInput()), new PyInteger(test.getSecondInput()), new PyInteger(test.getThirdInput()));
+        PyObject result = function.__call__(new PyString(test.getFirstInput()), new PyString(test.getSecondInput()), new PyString(test.getThirdInput()));
 
         return (int[]) result.__tojava__(int[].class);
 
@@ -125,17 +123,17 @@ public class EvaluationController {
                 default:
                     C_Response cResponse = Utilities.runCTest(test);
 
+                    System.out.println(cResponse.error);
+
                     if (cResponse.error.equals("") && cResponse.values.length > 1) {
                         response = cResponse.values;
                     } else if (cResponse.error.equals("") || cResponse.error.contains("TempJNICpp") || cResponse.error.contains("SIGSEV")) {
                         return new CompletedTest(test, false, "Got an exception. Message: " + "Runtime error. Please check your code.");
                     } else {
-                        if (cResponse.error.contains("-1")) {
-                            System.out.println("got a -1");
+                        if (cResponse.error.contains("-1\n")) {
                             if (cResponse.error.contains("Input is not a number")) return checkError(test, new NumberFormatException("Input is not a number").getMessage());
                             return checkError(test, cResponse.error);
                         } else {
-                            System.out.println("did not get a -1");
                             return new CompletedTest(test, false, "Got an exception. Message: " + cResponse.error);
                         }
                     }
@@ -174,10 +172,10 @@ public class EvaluationController {
 
     private List<Test> generateTests() {
         List<Test> tests = new ArrayList<>();
-        tests.add(new Test("Test 1", Category.BASIC, 10, 20, 30, new int[]{}, true, "not a number"));
-        tests.add(new Test("Test 2", Category.BASIC, 10, 20, 40, new int[]{10, 20, 40}, false, ""));
-        tests.add(new Test("Test 3", Category.MEDIUM, 10, 20, 50, new int[]{10, 20, 50}, false, ""));
-        tests.add(new Test("Test 4", Category.DIFFICULT, 10, 20, 90, new int[]{10, 20, 60}, false, ""));
+        tests.add(new Test("Test 1", Category.BASIC, "10", "20", "30", new int[]{}, true, "not a number"));
+        tests.add(new Test("Test 2", Category.BASIC, "10", "20", "40", new int[]{10, 20, 40}, false, ""));
+        tests.add(new Test("Test 3", Category.MEDIUM, "10", "20", "50", new int[]{10, 20, 50}, false, ""));
+        tests.add(new Test("Test 4", Category.DIFFICULT, "10", "20", "60", new int[]{10, 20, 60}, false, ""));
 
         return tests;
     }
