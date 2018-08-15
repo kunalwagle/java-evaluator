@@ -237,10 +237,6 @@ public class Utilities {
             response.error = runtimeOutput.toString();
         }
 
-        if (!response.error.equals("")){
-            String[] errorLines = response.error.split("\n");
-            response.error = errorLines[errorLines.length-1];
-        }
 
         // Convert to int[] for assertion
         int[] values = new int[outputList.size()];

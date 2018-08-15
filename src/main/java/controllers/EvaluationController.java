@@ -131,9 +131,11 @@ public class EvaluationController {
                         return new CompletedTest(test, false, "Got an exception. Message: " + "Runtime error. Please check your code.");
                     } else {
                         if (cResponse.error.contains("-1")) {
-                            // TODO: throw errors here based on keywords? and check them - ask Kunal what errors do we have in the prod tests
+                            System.out.println("got a -1");
+                            if (cResponse.error.contains("Input is not a number")) return checkError(test, new NumberFormatException("Input is not a number").getMessage());
                             return checkError(test, cResponse.error);
                         } else {
+                            System.out.println("did not get a -1");
                             return new CompletedTest(test, false, "Got an exception. Message: " + cResponse.error);
                         }
                     }
@@ -172,7 +174,7 @@ public class EvaluationController {
 
     private List<Test> generateTests() {
         List<Test> tests = new ArrayList<>();
-        tests.add(new Test("Test 1", Category.BASIC, 10, 20, 30, new int[]{10, 20, 30}, false, ""));
+        tests.add(new Test("Test 1", Category.BASIC, 10, 20, 30, new int[]{}, true, "not a number"));
         tests.add(new Test("Test 2", Category.BASIC, 10, 20, 40, new int[]{10, 20, 40}, false, ""));
         tests.add(new Test("Test 3", Category.MEDIUM, 10, 20, 50, new int[]{10, 20, 50}, false, ""));
         tests.add(new Test("Test 4", Category.DIFFICULT, 10, 20, 90, new int[]{10, 20, 60}, false, ""));

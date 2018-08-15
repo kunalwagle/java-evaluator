@@ -15,7 +15,7 @@ return output;
   
 int* answer(int input1, int input2, int input3){
 	int a[3];
-	printf("Input is not an int");
+	printf("Input is not a number");
 	a[0] = input1;
 	a[1] = input2;
 	a[2] = input3;
