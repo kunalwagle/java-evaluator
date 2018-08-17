@@ -33,6 +33,8 @@ public class EvaluationController {
         this.tests = tests;
     }
 
+    public TestServiceJava testEngine = new TestServiceJava();
+
     @CrossOrigin
     @RequestMapping(path = "/evaluate/{language}", method = RequestMethod.POST)
     public TestResult evaluate(@PathVariable String language, @RequestBody String input) {
@@ -143,6 +145,11 @@ public class EvaluationController {
                 "ingstr", false, ""));
         tests.add(new Test("when action is 2 reverse a string", Category.MEDIUM, "string", "2", "",
                 "gnirts", false, ""));
+        tests.add(new Test("when action is 3 return char with max occurences", Category.MEDIUM, "waffle",
+                "3", "", "f", false, ""));
+        tests.add(new Test("when action is 4 sort the string as per sorting order in the third parameter",
+                Category.DIFFICULT, "waffle","4", testEngine.getSorterString(),
+                "aefflw", false, ""));
         return tests;
     }
 
