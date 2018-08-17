@@ -131,11 +131,18 @@ public class EvaluationController {
 
     private List<Test> generateTests() {
         List<Test> tests = new ArrayList<>();
-        tests.add(new Test("Test 1", Category.BASIC, 10, 20, 30, new int[]{10, 20, 30}, false, ""));
-        tests.add(new Test("Test 2", Category.BASIC, 10, 20, 30, new int[]{10, 20, 40}, false, ""));
-        tests.add(new Test("Test 3", Category.MEDIUM, 10, 20, 30, new int[]{10, 20, 50}, false, ""));
-        tests.add(new Test("Test 4", Category.DIFFICULT, 10, 20, 30, new int[]{10, 20, 60}, false, ""));
-
+//        tests.add(new Test("Test 1", Category.BASIC, 10, 20, 30, new int[]{10, 20, 30}, false, ""));
+        tests.add(new Test("shuffle should throw error if action is not an integer", Category.BASIC, "",
+                "number", "", "invalid action type", true,
+                "invalid action type"));
+        tests.add(new Test("shuffle should throw error is action is outside 1 and 4", Category.BASIC, "",
+                "5", "", "action is out of range", true,
+                "action is out of range"));
+        tests.add(new Test("when action is 1 move number of chars specified in optionalArgs" +
+                " from the end of inputString to beginning", Category.MEDIUM, "string", "1", "3",
+                "ingstr", false, ""));
+        tests.add(new Test("when action is 2 reverse a string", Category.MEDIUM, "string", "2", "",
+                "gnirts", false, ""));
         return tests;
     }
 
