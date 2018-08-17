@@ -64,7 +64,6 @@ public class TestServiceJava {
         str = str.substring(0, str.length() - Integer.valueOf(argv) - 1);
         return tmp.concat(str);
     }
-//  To fix this one
     public String sortString(String sorterString, String str) {
         (str.chars().mapToObj(i -> (char) i)).
                 collect(Collectors.toList()).
