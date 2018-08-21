@@ -156,7 +156,7 @@ public class EvaluationController {
 //      To test this method
         tests.add(new Test("when action is 4 sort the string as per sorting order in the third parameter",
                 Category.DIFFICULT, inputString.toLowerCase(),"4", sorterString,
-                testEngine.sortString(sorterString, inputString), false, ""));
+                testEngine.sorterString(sorterString, inputString), false, ""));
         return tests;
     }
 

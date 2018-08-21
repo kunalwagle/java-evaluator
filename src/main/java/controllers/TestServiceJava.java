@@ -77,4 +77,10 @@ public class TestServiceJava {
         Arrays.sort(tmp);
         return new String(tmp);
     }
+
+    public String sorterString(String sorter, String str) {
+        String[] array = str.split("");
+        Arrays.sort(array, Comparator.comparingInt(sorter::indexOf));
+        return array.toString();
+    }
 }
