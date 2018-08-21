@@ -48,9 +48,10 @@ public class TestServiceJava {
     public String getSorterString() {
         String[] copy = alphabet;
         int currentIndex = alphabet.length;
+        int randomIndex;
         String tmp;
         while (currentIndex != 0) {
-            int randomIndex = (int) Math.floor(Math.random() * currentIndex);
+            randomIndex = (int) Math.floor(Math.random() * currentIndex);
             currentIndex--;
             tmp = copy[currentIndex];
             copy[currentIndex] = copy[randomIndex];
@@ -69,5 +70,11 @@ public class TestServiceJava {
                 collect(Collectors.toList()).
                 sort(Comparator.comparingInt(sorterString::indexOf));
         return str;
+    }
+
+    public String sortStringByAlphabet(String str) {
+        char[] tmp = str.toCharArray();
+        Arrays.sort(tmp);
+        return new String(tmp);
     }
 }
