@@ -40,11 +40,6 @@ public class TestServiceJava {
         return result;
     }
 
-    public String sortString(String str) {
-        return str.chars().sorted()
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
-    }
-
     public String getSorterString() {
         String[] copy = alphabet;
         int currentIndex = alphabet.length;
@@ -72,15 +67,20 @@ public class TestServiceJava {
         return str;
     }
 
-    public String sortStringByAlphabet(String str) {
-        char[] tmp = str.toCharArray();
-        Arrays.sort(tmp);
-        return new String(tmp);
-    }
-
     public String sorterString(String sorter, String str) {
         String[] array = str.split("");
         Arrays.sort(array, Comparator.comparingInt(sorter::indexOf));
         return array.toString();
+    }
+
+    public String sortString(String str) {
+        return str.chars().sorted()
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
+    }
+
+    public String sortStringByAlphabet(String str) {
+        char[] tmp = str.toCharArray();
+        Arrays.sort(tmp);
+        return new String(tmp);
     }
 }

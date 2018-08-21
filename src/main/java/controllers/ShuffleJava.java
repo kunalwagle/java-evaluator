@@ -3,10 +3,9 @@ package controllers;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ShuffleJava {
+class ShuffleJava {
     private TestServiceJava utils = new TestServiceJava();
-//  Simple and blunt implementation, to be improved
-    public String shuffleSolution(String str, String argv, Optional<String> optionalArgs) {
+    String shuffleSolution(String str, String argv, Optional<String> optionalArgs) {
         Integer command = Integer.valueOf(argv);
         switch (command) {
             case 1:
