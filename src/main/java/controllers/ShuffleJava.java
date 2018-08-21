@@ -1,9 +1,7 @@
 package controllers;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ShuffleJava {
     private TestServiceJava utils = new TestServiceJava();
@@ -12,22 +10,17 @@ public class ShuffleJava {
         Integer command = Integer.valueOf(argv);
         switch (command) {
             case 1:
-                str = utils.moveToBeginning(str, String.valueOf(optionalArgs));
-                break;
+                return utils.moveToBeginning(str, String.valueOf(optionalArgs));
             case 2:
-                str = utils.reverseString(str);
-                break;
+                return utils.reverseString(str);
             case 3:
-                str = ((Character) utils.getMaxOccurence(utils.
+                return ((Character) utils.getMaxOccurence(utils.
                         groupBy((str.chars().mapToObj(i -> (char) i)).
                                 collect(Collectors.toList())))).toString();
-                break;
             case 4:
-                str = utils.sortString(str, String.valueOf(optionalArgs));
-                break;
+                return utils.sortString(str, String.valueOf(optionalArgs));
             default:
                 throw new IllegalArgumentException("Wrong command entered");
         }
-        return str;
     }
 }
