@@ -1,6 +1,5 @@
 package controllers;
 
-
 //import components.Answer;
 
 import components.Category;
@@ -153,7 +152,6 @@ public class EvaluationController {
         tests.add(new Test("when action is 3 return char with max occurences", Category.MEDIUM, inputString,
                 "3", "", shuffleSolution.shuffleSolution(
                         inputString, "3", Optional.of("")), false, ""));
-//      To test this method
         tests.add(new Test("when action is 4 sort the string as per sorting order in the third parameter",
                 Category.DIFFICULT, inputString.toLowerCase(),"4", sorterString,
                 testEngine.sorterString(sorterString, inputString), false, ""));
@@ -163,5 +161,4 @@ public class EvaluationController {
     private Class<?> compileInput(String input) throws Exception {
         return InMemoryJavaCompiler.newInstance().compile("components.Answer", input);
     }
-
 }
