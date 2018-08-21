@@ -18,7 +18,7 @@ public class RandomUtils {
                 + String.valueOf(Math.random()).substring(2, maxLength - 1);
     }
 
-    private int getRandomInt(int min, int max) {
+    public int getRandomInt(int min, int max) {
         return new Random().nextInt(max - min + 1) + min;
     }
 

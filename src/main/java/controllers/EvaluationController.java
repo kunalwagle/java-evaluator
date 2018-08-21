@@ -15,10 +15,8 @@ import org.python.util.PythonInterpreter;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class EvaluationController {
@@ -34,6 +32,8 @@ public class EvaluationController {
     }
 
     public TestServiceJava testEngine = new TestServiceJava();
+
+    private ShuffleJava shuffleSolution = new ShuffleJava();
 
     @CrossOrigin
     @RequestMapping(path = "/evaluate/{language}", method = RequestMethod.POST)
@@ -132,24 +132,31 @@ public class EvaluationController {
     }
 
     private List<Test> generateTests() {
+        int randomStringLength = testEngine.utils.getRandomInt(6, 20);
+        String optionalArgs = String.valueOf(testEngine.utils.getRandomInt(0, randomStringLength / 2));
+        String inputString = testEngine.utils.getRandomString(randomStringLength);
+        char randomChar = testEngine.utils.getRandomChar();
+        String sorterString = testEngine.getSorterString();
+
         List<Test> tests = new ArrayList<>();
-//        tests.add(new Test("Test 1", Category.BASIC, 10, 20, 30, new int[]{10, 20, 30}, false, ""));
         tests.add(new Test("shuffle should throw error if action is not an integer", Category.BASIC, "",
-                "number", "", "invalid action type", true,
+                String.valueOf(randomChar), "", "invalid action type", true,
                 "invalid action type"));
         tests.add(new Test("shuffle should throw error is action is outside 1 and 4", Category.BASIC, "",
                 "5", "", "action is out of range", true,
                 "action is out of range"));
         tests.add(new Test("when action is 1 move number of chars specified in optionalArgs" +
-                " from the end of inputString to beginning", Category.MEDIUM, "string", "1", "3",
-                "ingstr", false, ""));
-        tests.add(new Test("when action is 2 reverse a string", Category.MEDIUM, "string", "2", "",
-                "gnirts", false, ""));
-        tests.add(new Test("when action is 3 return char with max occurences", Category.MEDIUM, "waffle",
-                "3", "", "f", false, ""));
+                " from the end of inputString to beginning", Category.MEDIUM, inputString, "1", "3",
+                testEngine.moveToBeginning(inputString, optionalArgs), false, ""));
+        tests.add(new Test("when action is 2 reverse a string", Category.MEDIUM, inputString, "2", "",
+                testEngine.reverseString(inputString), false, ""));
+        tests.add(new Test("when action is 3 return char with max occurences", Category.MEDIUM, inputString,
+                "3", "", shuffleSolution.shuffleSolution(
+                        inputString, "3", Optional.of("")), false, ""));
+//      To test this method
         tests.add(new Test("when action is 4 sort the string as per sorting order in the third parameter",
-                Category.DIFFICULT, "waffle","4", testEngine.getSorterString(),
-                "aefflw", false, ""));
+                Category.DIFFICULT, inputString.toLowerCase(),"4", sorterString,
+                testEngine.sortString(sorterString, inputString), false, ""));
         return tests;
     }
 

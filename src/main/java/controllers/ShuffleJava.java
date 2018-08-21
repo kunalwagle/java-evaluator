@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public class ShuffleJava {
     private TestServiceJava utils = new TestServiceJava();
 //  Simple and blunt implementation, to be improved
-    private String shuffleSolution(String str, String argv, Optional<String> optionalArgs) {
+    public String shuffleSolution(String str, String argv, Optional<String> optionalArgs) {
         Integer command = Integer.valueOf(argv);
         switch (command) {
             case 1:
