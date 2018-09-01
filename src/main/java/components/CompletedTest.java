@@ -5,7 +5,7 @@ public class CompletedTest extends Test {
     private String message;
     private boolean passed;
 
-    public CompletedTest(String title, Category category, int firstInput, int secondInput, int thirdInput, int[] expected, boolean exceptionExpected, String exceptionText) {
+    public CompletedTest(String title, Category category, String firstInput, String secondInput, String thirdInput, String expected, boolean exceptionExpected, String exceptionText) {
         super(title, category, firstInput, secondInput, thirdInput, expected, exceptionExpected, exceptionText);
     }
 

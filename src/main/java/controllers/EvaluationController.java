@@ -86,13 +86,14 @@ public class EvaluationController {
 
     private int[] runPythonTest(PyObject function, Test test) {
 
-        PyObject result = function.__call__(new PyInteger(test.getFirstInput()), new PyInteger(test.getSecondInput()), new PyInteger(test.getThirdInput()));
+        PyObject result = function.__call__(new PyInteger(Integer.parseInt(test.getFirstInput())), new PyInteger(Integer.parseInt(test.getFirstInput())), new PyInteger(Integer.parseInt(test.getFirstInput())));
 
         return (int[]) result.__tojava__(int[].class);
 
     }
 
     private CompletedTest runTest(Class<?> compiledClass, PyObject shuffleFunction, Test test, String language) {
+        int[] expectedResult = getExpectedResult(test.getExpected());
         try {
             int[] response;
             if (language.equals("java")) {
@@ -100,10 +101,10 @@ public class EvaluationController {
             } else {
                 response = runPythonTest(shuffleFunction, test);
             }
-            if (Arrays.equals(test.getExpected(), response)) {
+            if (Arrays.equals(expectedResult, response)) {
                 return new CompletedTest(test, true, "Test Passed");
             } else {
-                return new CompletedTest(test, false, "Expected " + Arrays.toString(test.getExpected()) + ", Got " + Arrays.toString(response));
+                return new CompletedTest(test, false, "Expected " + test.getExpected() + ", Got " + Arrays.toString(response));
             }
         } catch (InvocationTargetException e) {
             return checkError(test, e.getTargetException().toString());
@@ -114,7 +115,15 @@ public class EvaluationController {
         }
     }
 
-    private CompletedTest checkError(Test test, String exceptionMessage) {
+    private int[] getExpectedResult(String expected) {
+        return Arrays.stream(expected.substring(1, expected.length()-1)
+                        .split(","))
+                        .map(String::trim)
+                        .mapToInt(Integer::parseInt)
+                        .toArray();
+	}
+
+	private CompletedTest checkError(Test test, String exceptionMessage) {
         if (test.isExceptionExpected()) {
             if (exceptionMessage.contains(test.getExceptionText())) {
                 return new CompletedTest(test, true, "Test Passed");
