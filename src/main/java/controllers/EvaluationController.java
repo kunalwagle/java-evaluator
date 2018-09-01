@@ -8,8 +8,8 @@ import components.Test;
 import components.TestResult;
 import org.mdkt.compiler.InMemoryJavaCompiler;
 import org.python.core.PyException;
-import org.python.core.PyInteger;
 import org.python.core.PyObject;
+import org.python.core.PyString;
 import org.python.util.PythonInterpreter;
 import org.springframework.web.bind.annotation.*;
 
@@ -86,7 +86,7 @@ public class EvaluationController {
 
     private int[] runPythonTest(PyObject function, Test test) {
 
-        PyObject result = function.__call__(new PyInteger(Integer.parseInt(test.getFirstInput())), new PyInteger(Integer.parseInt(test.getFirstInput())), new PyInteger(Integer.parseInt(test.getFirstInput())));
+        PyObject result = function.__call__(new PyString(test.getFirstInput()), new PyString(test.getSecondInput()), new PyString(test.getThirdInput()));
 
         return (int[]) result.__tojava__(int[].class);
 
@@ -107,12 +107,19 @@ public class EvaluationController {
             if (Arrays.equals(expectedResult, response)) {
                 return new CompletedTest(test, true, "Test Passed");
             } else {
+                if (test.isExceptionExpected()) {
+                    return new CompletedTest(test, false, "Expected exception with text \'" + test.getExpected() + "\', Got " + Arrays.toString(response));
+                }
                 return new CompletedTest(test, false, "Expected " + test.getExpected() + ", Got " + Arrays.toString(response));
             }
         } catch (InvocationTargetException e) {
             return checkError(test, e.getTargetException().toString());
         } catch (PyException e) {
             return checkError(test, e.toString());
+        } catch (ClassCastException e) {
+            return new CompletedTest(test, false, "Got a ClassCastException. Expected return type to be int[]");
+        } catch (IllegalArgumentException e) {
+            return new CompletedTest(test, false, "Got an IllegalArgumentException. Expected 3 arguments: String, String, String.");
         } catch (Exception e) {
             return new CompletedTest(test, false, "Got an exception. Message: " + e.getMessage());
         }
