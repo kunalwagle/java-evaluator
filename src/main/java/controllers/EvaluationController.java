@@ -93,7 +93,10 @@ public class EvaluationController {
     }
 
     private CompletedTest runTest(Class<?> compiledClass, PyObject shuffleFunction, Test test, String language) {
-        int[] expectedResult = getExpectedResult(test.getExpected());
+        int[] expectedResult = null;
+        if (!test.isExceptionExpected()) {
+            expectedResult = getExpectedResult(test.getExpected());
+        }
         try {
             int[] response;
             if (language.equals("java")) {
