@@ -60,6 +60,7 @@ public class EvaluationController {
                 interpreter.exec(input);
 
                 shuffleFunction = interpreter.get("shuffle");
+                
             } catch (Exception  e) {
                 completedTests.add(new CompletedTest(tests.get(0), false, e.toString()));
                 successfullyCompiled = false;
@@ -84,33 +85,32 @@ public class EvaluationController {
         return new TestResult(completedTests, tests.size());
     }
 
-    private int[] runPythonTest(PyObject function, Test test) {
-
+    private String runPythonTest(PyObject function, Test test) {
         PyObject result = function.__call__(new PyString(test.getFirstInput()), new PyString(test.getSecondInput()), new PyString(test.getThirdInput()));
 
-        return (int[]) result.__tojava__(int[].class);
+        return (String) result.__tojava__(String.class);
 
     }
 
     private CompletedTest runTest(Class<?> compiledClass, PyObject shuffleFunction, Test test, String language) {
-        int[] expectedResult = null;
+        String expectedResult = null;
         if (!test.isExceptionExpected()) {
-            expectedResult = getExpectedResult(test.getExpected());
+            expectedResult = test.getExpected();//getExpectedResult(test.getExpected());
         }
         try {
-            int[] response;
+            String response;
             if (language.equals("java")) {
                 response = runJavaTest(compiledClass, test);
             } else {
                 response = runPythonTest(shuffleFunction, test);
             }
-            if (Arrays.equals(expectedResult, response)) {
+            if (response.equals(expectedResult)) {
                 return new CompletedTest(test, true, "Test Passed");
             } else {
                 if (test.isExceptionExpected()) {
-                    return new CompletedTest(test, false, "Expected exception with text \'" + test.getExpected() + "\', Got " + Arrays.toString(response));
+                    return new CompletedTest(test, false, "Expected exception with text \'" + test.getExpected() + "\', Got " + response);
                 }
-                return new CompletedTest(test, false, "Expected " + test.getExpected() + ", Got " + Arrays.toString(response));
+                return new CompletedTest(test, false, "Expected " + test.getExpected() + ", Got " + response);
             }
         } catch (InvocationTargetException e) {
             return checkError(test, e.getTargetException().toString());
@@ -125,13 +125,13 @@ public class EvaluationController {
         }
     }
 
-    private int[] getExpectedResult(String expected) {
-        return Arrays.stream(expected.substring(1, expected.length()-1)
-                        .split(","))
-                        .map(String::trim)
-                        .mapToInt(Integer::parseInt)
-                        .toArray();
-	}
+    // private int[] getExpectedResult(String expected) {
+    //     return Arrays.stream(expected.substring(1, expected.length()-1)
+    //                     .split(","))
+    //                     .map(String::trim)
+    //                     .mapToInt(Integer::parseInt)
+    //                     .toArray();
+	// }
 
 	private CompletedTest checkError(Test test, String exceptionMessage) {
         if (test.isExceptionExpected()) {
@@ -143,9 +143,10 @@ public class EvaluationController {
         return new CompletedTest(test, false, "Got an exception. Message: " + exceptionMessage);
     }
 
-    private int[] runJavaTest(Class<?> compiledClass, Test test) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    private String runJavaTest(Class<?> compiledClass, Test test)
+            throws InstantiationException, IllegalAccessException, InvocationTargetException {
         Object answer = compiledClass.newInstance();
-        return (int[]) compiledClass.getMethods()[0].invoke(answer, test.getFirstInput(), test.getSecondInput(), test.getThirdInput());
+        return (String) compiledClass.getMethods()[0].invoke(answer, test.getFirstInput(), test.getSecondInput(), test.getThirdInput());
     }
 
     private List<Test> generateTests() {

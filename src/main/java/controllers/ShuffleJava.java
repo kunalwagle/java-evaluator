@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 class ShuffleJava {
     private TestServiceJava utils = new TestServiceJava();
+
     String shuffleSolution(String str, String argv, Optional<String> optionalArgs) {
         Integer command = Integer.valueOf(argv);
         switch (command) {
