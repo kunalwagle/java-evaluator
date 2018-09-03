@@ -117,7 +117,7 @@ public class EvaluationController {
         } catch (PyException e) {
             return checkError(test, e.toString());
         } catch (ClassCastException e) {
-            return new CompletedTest(test, false, "Got a ClassCastException. Expected return type to be int[]");
+            return new CompletedTest(test, false, "Got a ClassCastException. Expected return type to be String");
         } catch (IllegalArgumentException e) {
             return new CompletedTest(test, false, "Got an IllegalArgumentException. Expected 3 arguments: String, String, String.");
         } catch (Exception e) {
