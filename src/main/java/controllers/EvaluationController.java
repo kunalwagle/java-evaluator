@@ -125,20 +125,19 @@ public class EvaluationController {
                     response = runPythonTest(shuffleFunction, test);
                     break;
                 default:
-                    C_Response cResponse = Utilities.runCTest(test);
-
-                    if (cResponse.error.equals("")) {
-                        response = cResponse.values;
-                    } else {
-                        if (cResponse.error.contains("-1")){
-                            // TODO: throw errors here based on keywords? and check them - ask Kunal what erros do we have in the prod tests
-                            return checkError(test, cResponse.error);
-                        } else {
-                            return new CompletedTest(test, false, "Got an exception. Message: " + cResponse.error);
-                        }
-                    }
-
-                    break;
+//                    C_Response cResponse = Utilities.runCTest(test);
+//
+//                    if (cResponse.error.equals("")) {
+//                        response = cResponse.values;
+//                    } else {
+//                        if (cResponse.error.contains("-1")){
+//                            // TODO: throw errors here based on keywords? and check them - ask Kunal what erros do we have in the prod tests
+//                            return checkError(test, cResponse.error);
+//                        } else {
+//                            return new CompletedTest(test, false, "Got an exception. Message: " + cResponse.error);
+//                        }
+//                    }
+                    throw new NullPointerException("Huh");
             }
 
             if (response.equals(expectedResult)) {
