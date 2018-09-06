@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/java-evaluator.iml" filepath="$PROJECT_DIR$/java-evaluator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/com.cr.javaevaluator.iml" filepath="$PROJECT_DIR$/com.cr.javaevaluator.iml" />
     </modules>
   </component>
 </project>

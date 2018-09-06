@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="java-evaluator" />
+        <module name="com.cr.javaevaluator" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="java-evaluator" target="1.8" />
+      <module name="com.cr.javaevaluator" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

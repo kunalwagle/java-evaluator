@@ -2,17 +2,21 @@ package controllers;
 
 //import components.Answer;
 
+import JNI.C_Response;
+import JNI.Utilities;
 import components.Category;
 import components.CompletedTest;
 import components.Test;
 import components.TestResult;
 import org.mdkt.compiler.InMemoryJavaCompiler;
+import org.mdkt.compiler.SourceCode;
 import org.python.core.PyException;
 import org.python.core.PyObject;
 import org.python.core.PyString;
 import org.python.util.PythonInterpreter;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -25,7 +29,7 @@ public class EvaluationController {
         this.tests = generateTests();
     }
 
-    public EvaluationController(List<Test> tests) {
+    EvaluationController(List<Test> tests) {
         this.tests = tests;
     }
 
@@ -35,7 +39,7 @@ public class EvaluationController {
 
     @CrossOrigin
     @RequestMapping(path = "/evaluate/{language}", method = RequestMethod.POST)
-    public TestResult evaluate(@PathVariable String language, @RequestBody String input) {
+    public TestResult evaluate(@PathVariable String language, @RequestBody String input) throws IOException {
 
         List<CompletedTest> completedTests = new ArrayList<>();
 
@@ -44,30 +48,42 @@ public class EvaluationController {
 
         PyObject shuffleFunction = null;
 
-        if (language.equals("java")) {
-            try {
-                compiledClass = compileInput(input);
-            } catch (Exception e) {
-                completedTests.add(new CompletedTest(tests.get(0), false, e.getMessage()));
-            }
-            successfullyCompiled = compiledClass != null;
-        } else {
-            try {
-                Properties p = new Properties();
-                p.setProperty("python.import.site", "false");
-                PythonInterpreter.initialize(System.getProperties(), p, new String[] {});
-                PythonInterpreter interpreter = new PythonInterpreter();
-                interpreter.exec(input);
+        switch (language) {
+            case "java":
+                try {
+                    compiledClass = compileInput(input);
+                } catch (Exception e) {
+                    completedTests.add(new CompletedTest(tests.get(0), false, e.getMessage()));
+                }
+                successfullyCompiled = compiledClass != null;
+                break;
+            case "python":
+                try {
+                    Properties p = new Properties();
+                    p.setProperty("python.import.site", "false");
+                    PythonInterpreter.initialize(System.getProperties(), p, new String[]{});
+                    PythonInterpreter interpreter = new PythonInterpreter();
+                    interpreter.exec(input);
 
-                shuffleFunction = interpreter.get("shuffle");
-                
-            } catch (Exception  e) {
-                completedTests.add(new CompletedTest(tests.get(0), false, e.toString()));
-                successfullyCompiled = false;
-            }
+                    shuffleFunction = interpreter.get("shuffle");
+                } catch (Exception e) {
+                    completedTests.add(new CompletedTest(tests.get(0), false, e.toString()));
+                    successfullyCompiled = false;
+                }
+                break;
+            case "c":
+                String compilationOutput = Utilities.compile(tests.get(0), input);
 
+                // Stop if error occurred
+                if (compilationOutput.contains("error")) {
+                    completedTests.add(new CompletedTest(tests.get(0), false, compilationOutput));
+                    return new TestResult(completedTests, tests.size());
+                } else {
+                    successfullyCompiled = true;
+                    System.out.println("Compilation successful.");
+                }
+                break;
         }
-
         if (successfullyCompiled) {
 
             assert tests != null;
@@ -92,6 +108,7 @@ public class EvaluationController {
 
     }
 
+
     private CompletedTest runTest(Class<?> compiledClass, PyObject shuffleFunction, Test test, String language) {
         String expectedResult = null;
         if (!test.isExceptionExpected()) {
@@ -99,16 +116,36 @@ public class EvaluationController {
         }
         try {
             String response;
-            if (language.equals("java")) {
-                response = runJavaTest(compiledClass, test);
-            } else {
-                response = runPythonTest(shuffleFunction, test);
+
+            switch (language) {
+                case "java":
+                    response = runJavaTest(compiledClass, test);
+                    break;
+                case "python":
+                    response = runPythonTest(shuffleFunction, test);
+                    break;
+                default:
+                    C_Response cResponse = Utilities.runCTest(test);
+
+                    if (cResponse.error.equals("")) {
+                        response = cResponse.values;
+                    } else {
+                        if (cResponse.error.contains("-1")){
+                            // TODO: throw errors here based on keywords? and check them - ask Kunal what erros do we have in the prod tests
+                            return checkError(test, cResponse.error);
+                        } else {
+                            return new CompletedTest(test, false, "Got an exception. Message: " + cResponse.error);
+                        }
+                    }
+
+                    break;
             }
+
             if (response.equals(expectedResult)) {
                 return new CompletedTest(test, true, "Test Passed");
             } else {
                 if (test.isExceptionExpected()) {
-                    return new CompletedTest(test, false, "Expected exception with text \'" + test.getExpected() + "\', Got " + response);
+                    return new CompletedTest(test, false, "Expected exception with text \'" + test.getExpected() + "\', but none was thrown");
                 }
                 return new CompletedTest(test, false, "Expected " + test.getExpected() + ", Got " + response);
             }
@@ -119,7 +156,7 @@ public class EvaluationController {
         } catch (ClassCastException e) {
             return new CompletedTest(test, false, "Got a ClassCastException. Expected return type to be String");
         } catch (IllegalArgumentException e) {
-            return new CompletedTest(test, false, "Got an IllegalArgumentException. Expected 3 arguments: String, String, String.");
+            return new CompletedTest(test, false, "Got an IllegalArgumentException. Expected 3 arguments: inputString (String), action (String), optionalArgs (String).");
         } catch (Exception e) {
             return new CompletedTest(test, false, "Got an exception. Message: " + e.getMessage());
         }
