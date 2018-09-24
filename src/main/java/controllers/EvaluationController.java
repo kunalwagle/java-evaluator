@@ -23,16 +23,6 @@ import java.util.*;
 @RestController
 public class EvaluationController {
 
-    private List<Test> tests;
-
-    public EvaluationController() {
-        this.tests = generateTests();
-    }
-
-    EvaluationController(List<Test> tests) {
-        this.tests = tests;
-    }
-
     public TestServiceJava testEngine = new TestServiceJava();
 
     private ShuffleJava shuffleSolution = new ShuffleJava();
@@ -42,6 +32,8 @@ public class EvaluationController {
     public TestResult evaluate(@PathVariable String language, @RequestBody String input) throws IOException {
 
         List<CompletedTest> completedTests = new ArrayList<>();
+
+        List<Test> tests = generateTests();
 
         Class<?> compiledClass = null;
         boolean successfullyCompiled = true;
@@ -66,6 +58,10 @@ public class EvaluationController {
                     interpreter.exec(input);
 
                     shuffleFunction = interpreter.get("shuffle");
+                    if (shuffleFunction == null) {
+                        completedTests.add(new CompletedTest(tests.get(0), false, "Could not find a function called shuffle"));
+                        successfullyCompiled = false;
+                    }
                 } catch (Exception e) {
                     completedTests.add(new CompletedTest(tests.get(0), false, e.toString()));
                     successfullyCompiled = false;
@@ -146,7 +142,7 @@ public class EvaluationController {
                 if (test.isExceptionExpected()) {
                     return new CompletedTest(test, false, "Expected exception with text \'" + test.getExpected() + "\', but none was thrown");
                 }
-                return new CompletedTest(test, false, "Expected " + test.getExpected() + ", Got " + response);
+                return new CompletedTest(test, false, "Inputs: " + test.getFirstInput() + ", " + test.getSecondInput() + ", " + test.getThirdInput() + "\n" + "Expected Output: " + test.getExpected() + ", Got " + response);
             }
         } catch (InvocationTargetException e) {
             return checkError(test, e.getTargetException().toString());

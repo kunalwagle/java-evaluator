@@ -56,8 +56,8 @@ public class TestServiceJava {
     }
 
     public String moveToBeginning(String str, String argv) {
-        String tmp = str.substring(str.length() - Integer.valueOf(argv), str.length() - 1);
-        str = str.substring(0, str.length() - Integer.valueOf(argv) - 1);
+        String tmp = str.substring(str.length() - Integer.valueOf(argv), str.length());
+        str = str.substring(0, str.length() - Integer.valueOf(argv));
         return tmp.concat(str);
     }
     public String sortString(String sorterString, String str) {

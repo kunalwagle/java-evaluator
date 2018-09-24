@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class TestResult {
 
-    private Map<String, List<CompletedTest>> completedTests;
+    private Map<Integer, List<CompletedTest>> completedTests;
     private boolean allTestsComplete;
 
     public TestResult(List<CompletedTest> completedTests, int numberOfTests) {
@@ -15,12 +15,25 @@ public class TestResult {
         this.allTestsComplete = isAllTestsComplete(completedTests, numberOfTests);
     }
 
-    private Map<String,List<CompletedTest>> createMap(List<CompletedTest> completedTests) {
+    private Integer mapDifficulty(Category category) {
+        switch (category) {
+            case BASIC:
+                return 0;
+            case MEDIUM:
+                return 1;
+            case DIFFICULT:
+                return 2;
+            default:
+                return 3;
+        }
+    }
+
+    private Map<Integer,List<CompletedTest>> createMap(List<CompletedTest> completedTests) {
         List<Category> categories = completedTests.stream().map(Test::getCategory).distinct().collect(Collectors.toList());
-        Map<String, List<CompletedTest>> result = new HashMap<>();
+        Map<Integer, List<CompletedTest>> result = new HashMap<>();
         for (Category category : categories) {
             List<CompletedTest> tests = completedTests.stream().filter(test -> test.getCategory().equals(category)).collect(Collectors.toList());
-            result.put(category.getType(), tests);
+            result.put(mapDifficulty(category), tests);
         }
         return result;
     }
@@ -29,7 +42,7 @@ public class TestResult {
         return numberOfTests == completedTests.size() && completedTests.stream().allMatch(CompletedTest::isPassed);
     }
 
-    public Map<String, List<CompletedTest>> getCompletedTests() {
+    public Map<Integer, List<CompletedTest>> getCompletedTests() {
         return completedTests;
     }
 
