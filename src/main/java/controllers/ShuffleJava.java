@@ -17,8 +17,8 @@ class ShuffleJava {
                 return ((Character) utils.getMaxOccurence(utils.
                         groupBy((str.chars().mapToObj(i -> (char) i)).
                                 collect(Collectors.toList())))).toString();
-            case 4:
-                return utils.sortString(str, String.valueOf(optionalArgs));
+//            case 4:
+//                return utils.sortString(str, String.valueOf(optionalArgs));
             default:
                 throw new IllegalArgumentException("Wrong command entered");
         }

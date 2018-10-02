@@ -192,7 +192,7 @@ public class EvaluationController {
         tests.add(new Test("shuffle should throw error if action is not an integer", Category.BASIC, "",
                 String.valueOf(randomChar), "", "invalid action type", true,
                 "invalid action type"));
-        tests.add(new Test("shuffle should throw error is action is outside 1 and 4", Category.BASIC, "",
+        tests.add(new Test("shuffle should throw error is action is outside 1 and 3", Category.BASIC, "",
                 "5", "", "action is out of range", true,
                 "action is out of range"));
         tests.add(new Test("when action is 1 move number of chars specified in optionalArgs" +
@@ -203,9 +203,9 @@ public class EvaluationController {
         tests.add(new Test("when action is 3 return char with max occurences", Category.MEDIUM, inputString,
                 "3", "", shuffleSolution.shuffleSolution(
                         inputString, "3", Optional.of("")), false, ""));
-        tests.add(new Test("when action is 4 sort the string as per sorting order in the third parameter",
-                Category.DIFFICULT, inputString.toLowerCase(),"4", sorterString,
-                testEngine.sorterString(sorterString, inputString), false, ""));
+//        tests.add(new Test("when action is 4 sort the string as per sorting order in the third parameter",
+//                Category.DIFFICULT, inputString.toLowerCase(),"4", sorterString,
+//                testEngine.sorterString(sorterString, inputString), false, ""));
         return tests;
     }
 
